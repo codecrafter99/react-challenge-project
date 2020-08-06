@@ -15,12 +15,14 @@ class OrderForm extends Component {
         super(props);
         this.state = {
             order_item: "",
-            quantity: "1"
+            quantity: "1",
+            order_resp: ""
         }
     }
 
     menuItemChosen(event) {
-        this.setState({ item: event.target.value });
+        // Bug: changed field item -> order_item so selected item would work
+        this.setState({ order_item: event.target.value, order_resp: "" });
     }
 
     menuQuantityChosen(event) {
@@ -42,7 +44,7 @@ class OrderForm extends Component {
             }
         })
         .then(res => res.json())
-        .then(response => console.log("Success", JSON.stringify(response)))
+        .then(response => this.setState({order_resp: response.success ? "Order was successful" : "Order failed" }))
         .catch(error => console.error(error));
     }
 
@@ -72,8 +74,15 @@ class OrderForm extends Component {
                             <option value="5">5</option>
                             <option value="6">6</option>
                         </select>
-                        <button type="button" className="order-btn" onClick={(event) => this.submitOrder(event)}>Order It!</button>
+                        <button 
+                            type="button" 
+                            className="order-btn" 
+                            onClick={(event) => this.submitOrder(event)}>Order It!</button>
                     </form>
+                    
+                    <div>
+                        {this.state.order_resp}
+                    </div>
                 </div>
             </Template>
         );
