@@ -49,3 +49,22 @@
         margin: 0;
     }
 }
+
+input {
+    border: 1px solid blue;
+    display: inline-block;
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+    width: 2em;
+    line-height: inherit;
+    vertical-align: inherit;
+    text-align: right;
+    color: inherit;
+    font: inherit;
+    background: none;
+  }
+  
+  input[disabled] {
+    border: 0;
+  }
