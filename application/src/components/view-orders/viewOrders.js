@@ -29,12 +29,9 @@ class ViewOrders extends Component {
             });
     }
 
-    handleEditClick() {
-        this.setState({ editModeEnabled: !this.state.editModeEnabled });
-    }
-
     onOrderDelete = (orderId) => {
         // send delete api call
+        // call goes out, but CORS error makes it fail
         console.log("deleting " + orderId);
         axios.delete(
             `${SERVER_IP}/api/delete-order/${orderId}`
@@ -47,6 +44,7 @@ class ViewOrders extends Component {
     }
 
     onDeleteAll = () => {
+        // the function deletes all of the records, but doesn't automatically refresh the screen
         axios.delete(
             `${SERVER_IP}/api/delete-all`
         ).then(
@@ -63,11 +61,11 @@ class ViewOrders extends Component {
     }
 
     saveOrder = (order) => {
+        // call goes out, but CORS error makes it fail
         console.log(order._id);
         axios.post(`${SERVER_IP}/api/edit-order/${order._id}`, { 
             ordered_by: order.ordered_by,
-            quantity: this.state.newQuantity,
-            menu_item: this.state.menu_item
+            quantity: this.state.newQuantity
          })
         .then(res => {
             console.log(res);
@@ -93,23 +91,23 @@ class ViewOrders extends Component {
                                     <p>Order placed at {`${createdDate.getHours()}:${createdDate.getMinutes()}:${createdDate.getSeconds()}`}</p>
                                     <p>Quantity: {order.quantity}</p>
                                     <form>
-                                        <label>Quantity: 
+                                        <label>New Qty: 
                                             <input 
                                                 type="text" 
-                                                value={order.quantity} 
+                                                value={this.state.newQuantity} 
                                                 onChange={(e) => {this.onQuantityChange(e)}}
                                                 name="quantity" />
                                         </label>
                                     </form>
-                                    <button 
-                                        onClick={() => {this.saveOrder(order._id)}} 
-                                        className="btn btn-success">Save Changes</button>
+                                    
                                  </div>
                                  <div className="col-md-4 view-order-right-col">
-                                     <button onClick={this.handleEditClick.bind(this)} className="btn btn-success">Edit</button>
-                                     <button 
-                                        onClick={() => {this.onOrderDelete(order._id)}} 
-                                        className="btn btn-danger">Delete</button>
+                                 <button 
+                                    onClick={() => {this.saveOrder(order)}} 
+                                    className="btn btn-success">Save</button>
+                                <button 
+                                    onClick={() => {this.onOrderDelete(order._id)}} 
+                                    className="btn btn-danger">Delete</button>
                                  </div>
                             </div>
                         );
